@@ -1,0 +1,15 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Create
+{% endblock %}
+
+{% block body %}
+    <form class="create-page-form" method="post">
+        {% csrf_token %}
+        <input required class="my-1" type="text" name="title" placeholder="Title" />
+        <textarea required name="content" placeholder="Content"></textarea>
+        <p class="text-center">{{ message }}</p>
+        <input type="submit">
+    </form>
+{% endblock %}
