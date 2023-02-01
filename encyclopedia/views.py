@@ -3,6 +3,7 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, QueryDi
 from django.urls import reverse
 from markdown2 import markdown
 from random import choice
+from typing import List
 
 from . import util
 
@@ -10,7 +11,7 @@ from . import util
 def index(request : HttpRequest) -> HttpResponse:
     data : QueryDict = request.GET
     query = data.get('q')
-    entries : list = util.list_entries()
+    entries : List[str] = util.list_entries()
     if query:
         query_entries : list = list()
         for entry in entries:
@@ -45,12 +46,20 @@ def create(request : HttpRequest) -> HttpResponse:
         data : QueryDict = request.POST
         title : str = data.get('title')
         content : str = data.get('content')
-        
+        entries : list = util.list_entries()
+
         if not title or not content:
             return render(request, "encyclopedia/create.html", {
                 "message": "Fill out data properly"
             })
         else:
+            for entry in entries:
+                if entry.lower() == title.lower():
+                    return render(request, "encyclopedia/create.html", {
+                        "message": "Title Already Taken"
+                    })
+
+
             util.save_entry(title, content)
             return HttpResponseRedirect(reverse(f"encyclopedia:entry", args=(title,)))
 

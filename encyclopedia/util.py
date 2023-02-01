@@ -3,8 +3,10 @@ import re
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 
+from typing import List
 
-def list_entries() -> list:
+
+def list_entries() -> List[str]:
     """
     Returns a list of all names of encyclopedia entries.
     """
@@ -13,7 +15,7 @@ def list_entries() -> list:
                 for filename in filenames if filename.endswith(".md")))
 
 
-def save_entry(title : str, content : str):
+def save_entry(title : str, content : str) -> None:
     """
     Saves an encyclopedia entry, given its title and Markdown
     content. If an existing entry with the same title already exists,
